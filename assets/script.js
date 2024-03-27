@@ -1,7 +1,7 @@
 let minutos = 0
 let segundos = 60
 let idIntervalo;
-let tempoPomodoroPadrao = 1
+let tempoPomodoroPadrao = 25
 let tempoDescansoPadrao = 5
 let digitalContador = document.getElementById('contador')
 let labelMinuto = document.getElementById('minutos')
