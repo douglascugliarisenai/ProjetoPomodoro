@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/style.css">
+    <title>Pomodoro</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="digital">
+            <div class="contador">
+                <span id="minutos"></span>
+                <span id="doisponto">:</span>
+                <span id="segundos"></span>
+            </div>
+            <button class="btnConfig" onclick="configurarTempo()" title="Configurar Tempo">
+                <img src="./assets/img/config.png" alt="Botão de configuração" width="25" height="25">
+            </button>
+        </div>
+
+        <div class="config" style="display: none;">
+            <label for="tempo">Tempo do Pomodoro:</label>
+
+            <select name="tempo" id="cbTempo" onchange="selecionarTempoPomodoro()">
+                <option value="">Seleciono o Tempo</option>
+                <option value="25">25 min</option>
+                <option value="35">35 min</option>
+                <option value="45">45 min</option>
+                <option value="55">55 min</option>
+            </select>
+        </div>
+
+        <div class="buttons">
+            <button class="button" id="iniciar" onclick="iniciarPausarPomodoro()" title="Iniciar/Pausar Timer">
+                <img src="./assets/img/play.png" id="imagemBotaoIniciar" alt="Botão Iniciar" width="50"
+                    height="50"></button>
+            <button class="button" id="zerar" onclick="zerarPomodoro()" title="Reiniciar todo o pomodoro">
+                <img src="./assets/img/restart.png" id="imagemBotaoIniciar" alt="Botão Reiniciar" width="50"
+                    height="50">
+            </button>
+        </div>
+        <div class="concluir" style="display: none;" title="Finalizar seu exercício">
+            <button onclick="concluirExercicio()">
+                <img src="./assets/img/concluir.png" alt="Botão Concluir Exercicio" width="50" height="50">
+            </button>
+        </div>
+
+        <div class="listaExercicioConcluidos">
+            <h2 class="subtituloConcluidos" style="display: none;">Exercícios Finalizados</h2>
+            <ul class="lista">
+
+            </ul>
+        </div>
+
+        <div class="alongamentos">
+            <h2 class="subtitulo"></h2>
+            <span class="nomeExercicio"></span>
+            <span class="instrucao"></span>
+        </div>
+    </div>
+
+    <script src="./assets/script.js"></script>
+</body>
+
+</html>

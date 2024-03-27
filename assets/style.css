@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css?family=Rubik:500");
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  font-family: "Rubik", sans-serif;
+  background-color: darkseagreen;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  /* height: 100vh; */
+}
+
+.digital {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  color: rgb(253, 253, 253);
+  font-size: 50px;
+  margin-bottom: 50px;
+  border: 5px solid rgb(82, 156, 86);
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.contador {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.btnConfig {
+  margin-top: 40px;
+  background-color: Transparent;
+  border: none;
+}
+
+.config {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 25px;
+  margin-top: none;
+}
+
+.config label {
+  margin-right: 3px;
+}
+
+.config input {
+  width: 50px;
+}
+
+.config span {
+  margin-left: 5px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
+#iniciar {
+  background-color: rgb(147, 245, 147);
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  padding: 16px 42px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0px 0px 12px -2px rgba(0, 0, 0, 0.5);
+  line-height: 1.25;
+  background-color: rgb(147, 245, 147);
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  margin-right: 10px;
+  transition: background-color 0.6s ease;
+  width: 50px;
+  overflow: hidden;
+  &:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 50%;
+    left: 50%;
+    top: var(--mouse-y);
+    left: var(--mouse-x);
+    transform-style: flat;
+    transform: translate3d(-50%, -50%, 0);
+    background: rgba(white, 0.1);
+    border-radius: 100%;
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+  &:focus,
+  &:hover {
+    background: darken(#fc6e51, 7%);
+  }
+  &:active {
+    &:after {
+      width: 300px;
+      height: 300px;
+    }
+  }
+}
+
+.subtituloConcluidos{
+  font-style: italic;
+}
+
+.alongamentos {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 15px;
+  background-size: cover;
+  margin-bottom: 50px;
+}
+
+.nomeExercicio {
+  font-size: 30px;
+  font-style: italic;
+}
+
+.instrucao {
+  text-align: justify;
+}
+
+.concluir {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.concluir button {
+  display: flex;
+  justify-content: center;
+  width: 50px;
+  background-color: rgb(147, 245, 147);
+  border: none;
+  border-radius: 50%;
+}
+
+.listaExercicioConcluidos {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-size: cover;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 0;
+}
+
+.lista{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 500px;
+  margin-left: 0;
+}
