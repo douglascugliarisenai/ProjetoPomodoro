@@ -1,29 +1,32 @@
-let minutos = 0
-let segundos = 60
+let minutos = 0;
+let segundos = 60;
 let idIntervalo;
-let tempoPomodoroPadrao = 25
-let tempoDescansoPadrao = 5
-let digitalContador = document.getElementById('contador')
-let labelMinuto = document.getElementById('minutos')
-let labelSegundo = document.getElementById('segundos')
-const comboTempoPomodoro = document.getElementById('cbTempo')
-const btnIniciarPausa = document.getElementById('iniciar')
-const imgBtnIniciarPausa = document.getElementById('imagemBotaoIniciar')
-const spanNomeExercicio = document.querySelector('.nomeExercicio')
-const spanInstrucaoExercicio = document.querySelector('.instrucao')
-const btnConcluir = document.querySelector('.concluir')
-const main = document.querySelector('.main')
-const divAlongamentos = document.querySelector('.alongamentos')
-const divListaConcluido = document.querySelector('.listaExercicioConcluidos')
-const listaConcluido = document.querySelector('.lista')
-const subtituloExercicicio = document.querySelector('.subtitulo')
-const subtituloConcluidos = document.querySelector('.subtituloConcluidos')
-let tempoSelecionado
-let exerciciosSelecionados = []
-let exerciciosConcluidos = []
+let tempoPomodoroPadrao = 1;
+let tempoDescansoPadrao = 5;
 let botaoClicado = false;
-let exerciciosFiltrados
-let valorAleatorio
+let tempoSelecionado;
+let exerciciosSelecionados = [];
+let exerciciosConcluidos = [];
+let exerciciosFiltrados;
+let valorAleatorio;
+let offset = 0;
+let count = 0;
+let consultado = false;
+const digitalContador = document.getElementById('contador');
+const labelMinuto = document.getElementById('minutos');
+const labelSegundo = document.getElementById('segundos');
+const comboTempoPomodoro = document.getElementById('cbTempo');
+const btnIniciarPausa = document.getElementById('iniciar');
+const imgBtnIniciarPausa = document.getElementById('imagemBotaoIniciar');
+const spanNomeExercicio = document.querySelector('.nomeExercicio');
+const spanInstrucaoExercicio = document.querySelector('.instrucao');
+const btnConcluir = document.querySelector('.concluir');
+const main = document.querySelector('.main');
+const divAlongamentos = document.querySelector('.alongamentos');
+const divListaConcluido = document.querySelector('.listaExercicioConcluidos');
+const listaConcluido = document.querySelector('.lista');
+const subtituloExercicicio = document.querySelector('.subtitulo');
+const subtituloConcluidos = document.querySelector('.subtituloConcluidos');
 
 
 function iniciarPausarPomodoro() {
@@ -43,7 +46,6 @@ function iniciarPausarPomodoro() {
     }
 }
 
-
 function iniciarPomodoro() {
     if (tempoSelecionado === undefined) {
         minutos = tempoPomodoroPadrao
@@ -53,18 +55,6 @@ function iniciarPomodoro() {
 
     minutos--
     idIntervalo = setInterval(contadorTempo, 1000)
-}
-
-function pararPomodoro() {
-    clearInterval(idIntervalo)
-}
-
-function zerarPomodoro() {
-    reiniciarPomodoro()
-
-    exerciciosSelecionados.splice(0, exerciciosSelecionados.length)
-    exerciciosConcluidos.splice(0, exerciciosConcluidos.length)
-    exerciciosFiltrados = ''
 }
 
 function contadorTempo() {
@@ -82,10 +72,58 @@ function contadorTempo() {
     if (minutos == 0 & segundos == 0) {
         imgBtnIniciarPausa.src = "../assets/img/play.png";
 
-        pegarExercicios()
+        if (!consultado) {
+            consultarExercicios()
+        }
+
         clearInterval(idIntervalo)
         botaoClicado = false
     }
+}
+
+function consultarExercicios() {
+    const url = 'https://api.api-ninjas.com/v1/exercises'
+    const apiKey = 'Lnag8JbVMoTkvuKrLjejsw==V89esMtCr0Z2qNPb';
+
+    offset = count === 10 ? offset += 10 : offset
+
+    const queryParams = {
+        type: 'stretching',
+        offset: offset
+    }
+
+    const queryString = new URLSearchParams(queryParams).toString()
+
+    const UrlCompleta = `${url}?${queryString}`
+
+    let options = {
+        method: 'GET',
+        headers: { 'X-Api-key': apiKey }
+    }
+
+    fetch(UrlCompleta, options)
+        .then(res => res.json())
+        .then(data => {
+
+            exerciciosFiltrados = filtrarDados(data)
+            selecionarExercicioRandomico(exerciciosFiltrados)
+        })
+        .catch(err => {
+            console.log(`error ${err}`)
+        });
+}
+
+function pararPomodoro() {
+    clearInterval(idIntervalo)
+}
+
+function zerarPomodoro() {
+    reiniciarPomodoro()
+    desabilitarComponentes()
+
+    exerciciosSelecionados.splice(0, exerciciosSelecionados.length)
+    exerciciosConcluidos.splice(0, exerciciosConcluidos.length)
+    exerciciosFiltrados = ''
 }
 
 function reiniciarPomodoro() {
@@ -116,38 +154,11 @@ function formatarContador(numero) {
     return numero < 10 ? `0${numero}` : numero;
 }
 
-function pegarExercicios() {
-    const url = 'https://api.api-ninjas.com/v1/exercises'
-    const apiKey = 'Lnag8JbVMoTkvuKrLjejsw==V89esMtCr0Z2qNPb';
-
-    const queryParams = {
-        type: 'stretching',
-        offset: 100
-    }
-
-    const queryString = new URLSearchParams(queryParams).toString()
-
-    const UrlCompleta = `${url}?${queryString}`
-
-    let options = {
-        method: 'GET',
-        headers: { 'X-Api-key': apiKey }
-    }
-
-    fetch(UrlCompleta, options)
-        .then(res => res.json())
-        .then(data => {
-
-            exerciciosFiltrados = data.reduce((acc, cur) => {
-                acc.push({ nomeExercicio: cur.name, instrucaoExercicio: cur.instructions });
-                return acc;
-            }, []);
-
-            selecionarExercicioRandomico(exerciciosFiltrados)
-        })
-        .catch(err => {
-            console.log(`error ${err}`)
-        });
+function filtrarDados(dados) {
+    return dados.reduce((acc, cur) => {
+        acc.push({ nomeExercicio: cur.name, instrucaoExercicio: cur.instructions });
+        return acc;
+    }, []);
 }
 
 function selecionarExercicioRandomico(lista) {
@@ -158,11 +169,11 @@ function selecionarExercicioRandomico(lista) {
     while (!localizouNovo) {
         if (exerciciosConcluidos.length != 0) {
             let exercicioValidado = validarExeciciosRepetidos(exerciciosConcluidos, valorAleatorio.nomeExercicio)
-            if (exercicioValidado) {
+
+            if (!(exercicioValidado)) {
                 localizouNovo = true
                 exerciciosSelecionados.push({ nomeExercicio: valorAleatorio.nomeExercicio, instrucaoExercicio: valorAleatorio.instrucaoExercicio })
             } else {
-                console.log('Entrou no ELSE')
                 valorAleatorio = randomizarExercicio(lista)
                 localizouNovo = false
             }
@@ -171,7 +182,8 @@ function selecionarExercicioRandomico(lista) {
             exerciciosSelecionados.push({ nomeExercicio: valorAleatorio.nomeExercicio, instrucaoExercicio: valorAleatorio.instrucaoExercicio })
         }
 
-        renderizarSessaoExercicio()
+        renderizarSessaoExercicio(valorAleatorio)
+        count++
 
         if (btnConcluir.style.display === 'flex') {
             btnConcluir.style.display = 'block';
@@ -182,15 +194,12 @@ function selecionarExercicioRandomico(lista) {
 }
 
 function validarExeciciosRepetidos(lista, exercicioRandorizado) {
-    console.log(lista)
-    console.log(lista.nomeExercicio)
-    if(lista.nomeExercicio != exercicioRandorizado){
-            return true
-    }
-
-    return false;
+    let validar = false
+    lista.forEach(exercicioAtual => {
+        validar = exercicioAtual.nomeExercicio === exercicioRandorizado;
+    });
+    return validar
 }
-
 
 function randomizarExercicio(exercicios) {
     let objetoAleatorio = exercicios[Math.floor(Math.random() * exercicios.length)];
@@ -198,10 +207,9 @@ function randomizarExercicio(exercicios) {
 }
 
 function concluirExercicio() {
-    exerciciosSelecionados.forEach((exercicio) => {
-        exerciciosConcluidos.push({ exercicio })
-        renderizarSessaoConcluido(exercicio.nomeExercicio)
-    });
+    exerciciosConcluidos.push(valorAleatorio)
+    renderizarSessaoConcluido(valorAleatorio.nomeExercicio)
+    salvarListaConcluidaStorage()
 
     spanNomeExercicio.innerText = ''
     spanInstrucaoExercicio.innerText = ''
@@ -213,29 +221,39 @@ function concluirExercicio() {
     btnConcluir.style.display = 'none'
 }
 
+function salvarListaConcluidaStorage() {
+    let listaObjetosSalvo = localStorage.getItem('minhaListaObjetos');
+    
+    if(listaObjetosSalvo != null){
+        listaObjetosJSON = JSON.parse(listaObjetosSalvo);
+    }
 
-// function tranduzir(texto) {
-//     let options = {
-//         method: 'POST',
-//         headers: {
-//             "Content-Type": "application/x-www-form-urlencoded",
-//             "Accept":"application/json",
-//             "Authorization": "Basic NDQ2Ni0yUUZMR1dHYzpUekpOQmVqVTBuMXkwR2p4Vnhld05lUUpmb2pKb2NxZitZTnM5aDRF"
-//         },
-//         body: {
-//             text: texto,
-//             target_lang: "EN",
-//             source_lang: "PtBr"
-//         },
-//     }
+    listaObjetosJSON = JSON.stringify(exerciciosConcluidos);
+    localStorage.setItem('minhaListaObjetos', listaObjetosJSON);
+}
 
-//     fetch("https://api-free.deepl.com", options)
-//         .then(res => res.json()) // parse response as JSON
-//         .then(data => {
-//             console.log(data.json());
-//         })
+function recuperarExerciciosLocalStorage(){
+    let listaObjetosSalvo = localStorage.getItem('minhaListaObjetos');
+    let listaObjetos = JSON.parse(listaObjetosSalvo);
+    
+    if(listaObjetos != null){
+        listaObjetos.forEach(exercicioSalvo => {
+            renderizarSessaoConcluido(exercicioSalvo.nomeExercicio)
+        })
+    }
+    
+}
 
-// }
+function desabilitarComponentes() {
+    spanNomeExercicio.innerText = ''
+    spanInstrucaoExercicio.innerText = ''
+    subtituloExercicicio.innerText = ''
+
+    divAlongamentos.style.backgroundColor = ''
+    divAlongamentos.style.borderRadius = ''
+
+    btnConcluir.style.display = 'none'
+}
 
 function renderizarSessaoConcluido(exercicio) {
     if (!verificaDescricao(exercicio)) {
@@ -262,7 +280,7 @@ function renderizarSessaoConcluido(exercicio) {
     }
 }
 
-function renderizarSessaoExercicio() {
+function renderizarSessaoExercicio(exercicioSelecionado) {
     subtituloExercicicio.textContent = 'Exercício'
     subtituloExercicicio.style.fontStyle = 'italic'
     subtituloExercicicio.width = '500px'
@@ -274,8 +292,8 @@ function renderizarSessaoExercicio() {
     divAlongamentos.style.borderRadius = '15px'
     divAlongamentos.style.width = '500px'
 
-    spanNomeExercicio.innerText = valorAleatorio.nomeExercicio
-    spanInstrucaoExercicio.innerText = valorAleatorio.instrucaoExercicio
+    spanNomeExercicio.innerText = exercicioSelecionado.nomeExercicio
+    spanInstrucaoExercicio.innerText = exercicioSelecionado.instrucaoExercicio
 }
 
 function verificaDescricao(descricao) {

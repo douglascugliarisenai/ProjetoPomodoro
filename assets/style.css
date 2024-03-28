@@ -15,7 +15,6 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  /* height: 100vh; */
 }
 
 .digital {
@@ -85,48 +84,14 @@ body {
 .button {
   display: flex;
   justify-content: center;
-  padding: 16px 42px;
+  padding: 8px 35px;
   border-radius: 50%;
   border: none;
   box-shadow: 0px 0px 12px -2px rgba(0, 0, 0, 0.5);
-  line-height: 1.25;
   background-color: rgb(147, 245, 147);
-  text-decoration: none;
-  color: white;
-  font-size: 16px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  position: relative;
   margin-right: 10px;
-  transition: background-color 0.6s ease;
   width: 50px;
-  overflow: hidden;
-  &:after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    top: 50%;
-    left: 50%;
-    top: var(--mouse-y);
-    left: var(--mouse-x);
-    transform-style: flat;
-    transform: translate3d(-50%, -50%, 0);
-    background: rgba(white, 0.1);
-    border-radius: 100%;
-    transition: width 0.3s ease, height 0.3s ease;
   }
-  &:focus,
-  &:hover {
-    background: darken(#fc6e51, 7%);
-  }
-  &:active {
-    &:after {
-      width: 300px;
-      height: 300px;
-    }
-  }
-}
 
 .subtituloConcluidos{
   font-style: italic;
@@ -164,6 +129,7 @@ body {
   background-color: rgb(147, 245, 147);
   border: none;
   border-radius: 50%;
+  box-shadow: 0px 0px 12px -2px rgba(0, 0, 0, 0.5);
 }
 
 .listaExercicioConcluidos {
