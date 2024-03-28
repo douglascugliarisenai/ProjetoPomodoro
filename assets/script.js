@@ -217,6 +217,7 @@ function concluirExercicio() {
 
     divAlongamentos.style.backgroundColor = ''
     divAlongamentos.style.borderRadius = ''
+    divAlongamentos.style.boxShadow = ''
 
     btnConcluir.style.display = 'none'
 }
@@ -251,6 +252,7 @@ function desabilitarComponentes() {
 
     divAlongamentos.style.backgroundColor = ''
     divAlongamentos.style.borderRadius = ''
+    divAlongamentos.style.boxShadow = ''
 
     btnConcluir.style.display = 'none'
 }
@@ -266,6 +268,7 @@ function renderizarSessaoConcluido(exercicio) {
         divListaConcluido.style.borderRadius = '15px'
         divListaConcluido.style.padding = '15px'
         divListaConcluido.style.width = '500px'
+        divListaConcluido.style.boxShadow = '0px 0px 10px 1px rgb(68, 68, 68)'
 
         subtituloConcluidos.style.display = 'flex'
         subtituloConcluidos.style.justifyContent = 'center'
@@ -291,6 +294,7 @@ function renderizarSessaoExercicio(exercicioSelecionado) {
     divAlongamentos.style.backgroundColor = 'rgb(82, 156, 86)'
     divAlongamentos.style.borderRadius = '15px'
     divAlongamentos.style.width = '500px'
+    divAlongamentos.style.boxShadow = '0px 0px 10px 1px rgb(68, 68, 68)'
 
     spanNomeExercicio.innerText = exercicioSelecionado.nomeExercicio
     spanInstrucaoExercicio.innerText = exercicioSelecionado.instrucaoExercicio
