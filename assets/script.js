@@ -5,13 +5,12 @@ let tempoPomodoroPadrao = 1;
 let tempoDescansoPadrao = 5;
 let botaoClicado = false;
 let tempoSelecionado;
-let exerciciosSelecionados = [];
+let exerciciosSelecionados = [];  //Aqui ficam os exercicios selecionados
 let exerciciosConcluidos = [];
-let exerciciosFiltrados;
+let exerciciosFiltrados;  // Aqui ficam todos os exercicios
 let valorAleatorio;
 let offset = 0;
 let count = 0;
-let consultado = false;
 const digitalContador = document.getElementById('contador');
 const labelMinuto = document.getElementById('minutos');
 const labelSegundo = document.getElementById('segundos');
@@ -72,8 +71,11 @@ function contadorTempo() {
     if (minutos == 0 & segundos == 0) {
         imgBtnIniciarPausa.src = "../assets/img/play.png";
 
-        if (!consultado) {
+        console.log(count)
+        if (count === 0 || count > 9) {
             consultarExercicios()
+        }else {
+            selecionarExercicioRandomico(exerciciosFiltrados)
         }
 
         clearInterval(idIntervalo)
@@ -101,6 +103,7 @@ function consultarExercicios() {
         headers: { 'X-Api-key': apiKey }
     }
 
+    console.log('Consumindo API:', UrlCompleta)
     fetch(UrlCompleta, options)
         .then(res => res.json())
         .then(data => {
@@ -168,9 +171,9 @@ function selecionarExercicioRandomico(lista) {
 
     while (!localizouNovo) {
         if (exerciciosConcluidos.length != 0) {
-            let exercicioValidado = validarExeciciosRepetidos(exerciciosConcluidos, valorAleatorio.nomeExercicio)
-
-            if (!(exercicioValidado)) {
+            let exercicioValidado = validarExeciciosRepetidos(exerciciosSelecionados, valorAleatorio.nomeExercicio)
+            
+            if (exercicioValidado) {
                 localizouNovo = true
                 exerciciosSelecionados.push({ nomeExercicio: valorAleatorio.nomeExercicio, instrucaoExercicio: valorAleatorio.instrucaoExercicio })
             } else {
@@ -195,9 +198,15 @@ function selecionarExercicioRandomico(lista) {
 
 function validarExeciciosRepetidos(lista, exercicioRandorizado) {
     let validar = false
+    
     lista.forEach(exercicioAtual => {
-        validar = exercicioAtual.nomeExercicio === exercicioRandorizado;
+        if(exercicioAtual.nomeExercicio !== exercicioRandorizado){
+            validar = true
+        }else{
+            validar = false
+        }
     });
+
     return validar
 }
 
